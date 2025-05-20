@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order and Go - Admin Menu Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/stylesadmin2.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="js/firebase-init.js"></script>
+</head>
+<body>
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+        <p>Order and Go</p>
+    </div>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <h1>Order and Go</h1>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#" data-section="menu">
+                            <i class="fas fa-utensils"></i>
+                            <span>Menu</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button id="logout-btn" class="logout-btn-header">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+                <div class="header-middle">
+                    <h2>Menu Management</h2>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search menu items..." id="search-input">
+                        <button id="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button id="refresh-btn" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Menu Section -->
+            <section id="menu-section" class="content-section active">
+                <div class="menu-header">
+                    <div class="menu-filters">
+                        <button id="add-item-btn" class="primary-btn">
+                            <i class="fas fa-plus"></i> Add New Item
+                        </button>
+                        <select id="category-filter" class="category-select">
+                            <option value="all">All Categories</option>
+                            <option value="starters">Starters</option>
+                            <option value="main-course">Main Course</option>
+                            <option value="desserts">Desserts</option>
+                            <option value="beverages">Beverages</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="menu-grid" id="menu-items-grid">
+                    <!-- Menu items will be populated here -->
+                </div>
+            </section>        </main>
+    </div>
+
+    <!-- Add/Edit Menu Item Modal -->
+    <div class="modal" id="menu-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="menu-modal-title">Add Menu Item</h3>
+                <button class="close-modal" id="close-menu-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="menu-form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="menu-item-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" id="menu-item-price" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="menu-item-category" required>
+                            <option value="">Select Category</option>
+                            <option value="starters">Starters</option>
+                            <option value="main-course">Main Course</option>
+                            <option value="desserts">Desserts</option>
+                            <option value="beverages">Beverages</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="menu-item-image" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="menu-item-description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Save Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>    <!-- Add/Edit Menu Item Modal -->
+    <div class="modal" id="menu-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="menu-modal-title">Add Menu Item</h3>
+                <button class="close-modal" id="close-menu-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="menu-form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="menu-item-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" id="menu-item-price" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="menu-item-category" required>
+                            <option value="">Select Category</option>
+                            <option value="starters">Starters</option>
+                            <option value="main-course">Main Course</option>
+                            <option value="desserts">Desserts</option>
+                            <option value="beverages">Beverages</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="menu-item-image" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="menu-item-description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Save Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Menu Item</h3>
+                <button class="close-modal" id="close-delete-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+                <div class="form-actions">
+                    <button id="confirm-delete" class="danger-btn">Delete</button>
+                    <button id="cancel-delete" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="js/scriptadmin2.js"></script>
+</body>
+</html>
